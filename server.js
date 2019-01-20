@@ -34,14 +34,10 @@ app.listen(3000, () => {
   console.log('Express intro running on localhost:3000');
 })
 
-//Handle 404 response with middleware
-const wrongPathResponse = (request, response, next) => {
-  response.status(404);
-  response.sendFile('wrongPath.html', { root: 'public' });
-}
-
-app.use(wrongPathResponse);
-
+//Handle 404 response 
+app.use((request, response, next) => {
+  response.status(404).sendFile('wrongPath.html', { root: 'public' });
+});
 
 
 //Completed these extra challenges:
