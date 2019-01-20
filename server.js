@@ -1,3 +1,5 @@
+const mockData = require('./public/mock_data.json');
+
 const express = require('express');
 const app = express();
 
@@ -11,10 +13,6 @@ const timeLogger = (request, response, next) => {
   next();
 }
 
-const wrongPathResponse = (request, response, next) => {
-  response.status(404).send('Sorry, path not found!');
-}
-
 app.use(urlLogger, timeLogger);
 app.use(express.static('public'))
 
@@ -22,10 +20,12 @@ app.get('/', (request, response) => {
   // response.send('Hello World');
 })
 
+//Send mockdata to /json endpoint 
 app.get('/json', (request, response) => {
-  response.status(200).json({ 'name': 'Tanjie' })
+  response.status(200).send(mockData);
 })
 
+//Send static html file at /sunsets endpoint
 app.get('/sunsets', (request, response) => {
   response.sendFile('sunsets.html', { root: 'public' });
 })
@@ -34,9 +34,17 @@ app.listen(3000, () => {
   console.log('Express intro running on localhost:3000');
 })
 
+//Handle 404 response with middleware
+const wrongPathResponse = (request, response, next) => {
+  response.status(404);
+  response.sendFile('wrongPath.html', { root: 'public' });
+}
+
 app.use(wrongPathResponse);
 
-//Further Challenges
+
+
+//Completed these extra challenges:
 
   // #2: Make a new endpoint so that if the client makes a GET request to localhost:3000/sunsets, then the user sees a page with a bunch of pictures of sunsets.
 
